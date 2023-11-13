@@ -21,7 +21,6 @@ export class AppComponent {
   })  
 
   GetAsynchData(){
-
     // Observer/subscriber [this.myObservable.subscribe]
     this.myObservable.subscribe((val: any) => {
       this.data.push(val); // the call back function is the handler
