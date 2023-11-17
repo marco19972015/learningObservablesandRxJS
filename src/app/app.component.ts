@@ -26,14 +26,26 @@ export class AppComponent {
   })  
 
   GetAsynchData(){
-    // next, error, complete
-    this.myObservable.subscribe((val: any) => {  
-      this.data.push(val); 
-    }, (err) => {  // Recieves the error object
-      alert(err.message)  // In the error object we have a prop called message we can use (custom mess created)
-    },
-    () => {  // When the complete signal is emitted we can call this third callback function
-      alert('All data has been streamed')
-    });
+    // // next, error, complete
+    // this.myObservable.subscribe((val: any) => {  // function handler
+    //   this.data.push(val); 
+    // }, (err) => {  // Recieves the error object
+    //   alert(err.message)  // In the error object we have a prop called message we can use (custom mess created)
+    // },
+    // () => {  // When the complete signal is emitted we can call this third callback function
+    //   alert('All data has been streamed')
+    // });
+
+    this.myObservable.subscribe({
+      next: (val: any) => {
+        this.data.push(val)
+      },
+      error(err){
+        alert(err.message)
+      },
+      complete(){
+        alert('All the data is streamed!')
+      }
+    })
   }
 }
