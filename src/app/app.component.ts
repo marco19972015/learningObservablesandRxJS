@@ -17,7 +17,7 @@ export class AppComponent {
     setTimeout(()=> { observer.next(2); }, 2000);
     setTimeout(()=> { observer.next(3); }, 3000);
     // Emit an error using Error class
-    // etTimeout(()=> { observer.error(new Error('Something went wrong. Please try again later')); }, 3000);
+    // setTimeout(()=> { observer.error(new Error('Something went wrong. Please try again later')); }, 3000);
     // Code below will not run
     setTimeout(()=> { observer.next(4); }, 4000);
     setTimeout(()=> { observer.next(5); }, 5000);
@@ -26,25 +26,17 @@ export class AppComponent {
   })  
 
   GetAsynchData(){
-    // // next, error, complete
-    // this.myObservable.subscribe((val: any) => {  // function handler
-    //   this.data.push(val); 
-    // }, (err) => {  // Recieves the error object
-    //   alert(err.message)  // In the error object we have a prop called message we can use (custom mess created)
-    // },
-    // () => {  // When the complete signal is emitted we can call this third callback function
-    //   alert('All data has been streamed')
-    // });
-
-    this.myObservable.subscribe({
-      next: (val: any) => {
-        this.data.push(val)
-      },
-      error(err){
-        alert(err.message)
-      },
+    // Subscribe to the observable
+    this.myObservable.subscribe({  // create an object 
+      // specify the function name (next) and specify the value
+      next: (val: any) => {    // we use arrow function to get (this) keyword from outer scope
+        this.data.push(val);  // (this) keyword initially points to instance of the .subscribe function
+      },  // use comma to add to the object
+      error(err){  // the function name is error with an err object
+        alert(err.message);  
+      },  // third callback function is complete
       complete(){
-        alert('All the data is streamed!')
+        alert('All the data is streamed!');
       }
     })
   }
