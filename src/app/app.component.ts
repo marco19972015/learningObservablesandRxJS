@@ -16,6 +16,9 @@ export class AppComponent {
     setTimeout(()=> { observer.next(1); }, 1000);
     setTimeout(()=> { observer.next(2); }, 2000);
     setTimeout(()=> { observer.next(3); }, 3000);
+    // emit an error using Error class
+    setTimeout(()=> { observer.error(new Error('Something went wrong. Please try again later')); }, 3000);
+    // Code below will not run
     setTimeout(()=> { observer.next(4); }, 4000);
     setTimeout(()=> { observer.next(5); }, 5000);
   })  
@@ -23,18 +26,8 @@ export class AppComponent {
   GetAsynchData(){
     // Observer/subscriber [this.myObservable.subscribe]
     this.myObservable.subscribe((val: any) => {
-      this.data.push(val); // the call back function is the handler
+      this.data.push(val); // the call back function is the handler function
     });
   }
 
-
-
-  percentage: string = '-17'
-
-
-  methodChangeType() {
-    console.log(this.percentage);
-    let numType = +this.percentage
-    console.log(numType);
-  }
 }
