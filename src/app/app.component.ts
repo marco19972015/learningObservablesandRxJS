@@ -12,22 +12,27 @@ export class AppComponent {
 
   // Observable
   myObservable = new Observable((observer) =>{
-    // 1 mili-seconds or 1 second (exmaple of data stream)
+    // 1 mili-seconds or 1 second (exmaple of data stream) 
     setTimeout(()=> { observer.next(1); }, 1000);
     setTimeout(()=> { observer.next(2); }, 2000);
     setTimeout(()=> { observer.next(3); }, 3000);
     // emit an error using Error class
-    setTimeout(()=> { observer.error(new Error('Something went wrong. Please try again later')); }, 3000);
+    // setTimeout(()=> { observer.error(new Error('Something went wrong. Please try again later')); }, 3000);
     // Code below will not run
     setTimeout(()=> { observer.next(4); }, 4000);
     setTimeout(()=> { observer.next(5); }, 5000);
+    setTimeout(()=> { observer.complete(); }, 6000);  // signals all the data from the stream has been emitted
   })  
 
   GetAsynchData(){
-    // Observer/subscriber [this.myObservable.subscribe]
-    this.myObservable.subscribe((val: any) => {
-      this.data.push(val); // the call back function is the handler function
+    // next, error, complete
+    this.myObservable.subscribe((val: any) => {  
+      this.data.push(val); 
+    }, (err) => {  // recieves the error object
+      alert(err.message)  // in the error object we have a prop called message we can use (custom mess created)
+    },
+    () => {  // when the complete signal is emitted we can call this third callback function
+      alert('All data has been streamed')
     });
   }
-
 }
