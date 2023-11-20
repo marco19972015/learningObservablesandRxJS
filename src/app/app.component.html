@@ -1,10 +1,14 @@
 <div class="container">
   <h2>Observables in Angular</h2>
-  <div class="data-list" *ngFor="let x of data">
+  <!-- <div class="data-list" *ngFor="let x of data">
     {{ x }}
   </div>
 
+  <button (click)="GetAsynchData()">Get Data</button> -->
 
-
-  <button (click)="GetAsynchData()">Get Data</button>
+  <!-- id to add our div dynamically -->
+  <div  id="container">
+  </div>
+  <!-- Get a reference to this button element -->
+  <button #createbtn>Create new Item</button>
 </div>

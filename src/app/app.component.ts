@@ -1,19 +1,26 @@
-import { Component } from '@angular/core';
-import { Observable, from, of } from 'rxjs';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Observable, from, fromEvent, of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit{
   title = 'observables';
   data: any[] = [];
 
+
+  // Get the btn element reference from our view
+  @ViewChild('createbtn')
+  createbtn: ElementRef | undefined;
+
+  // create the button observable prop as global
+  createBtnObs: any;
+
+
   array1 = [1, 3, 5, 7, 9];
   array2 = ['A', 'B', 'C', 'D'];
-
-
 
   // Observable
   // myObservable = new Observable((observer) =>{
@@ -35,18 +42,13 @@ export class AppComponent {
   // each element of an ITTERABLE is emitted/streams one after the other 
   // myObservable = from('123456789');
 
-
-  // Create a Promise
   promiseData = new Promise((resolve, reject) => {
-    // this promise will return this data/array
     resolve([10, 20, 30, 40, 50]);
   })
 
-  // We can also convert a Promise into an Observable
   myObservable = from(this.promiseData);
 
   GetAsynchData(){
-    // Subscribe to the observable
     this.myObservable.subscribe({  
       next: (val: any) => {    
         this.data.push(val);  
@@ -55,9 +57,40 @@ export class AppComponent {
       error(err){  
         alert(err.message);  
       },  
-      complete(){  // Complete signal is auto emitted
+      complete(){  
         alert('All the data is streamed!');
       }
     })
+  }
+
+  // Will be our method that tracks our button and handles the observable
+  buttonClicked() {
+    let count = 0;  // counter 
+
+    // first argument is the target element 
+    // second arument is the event which we want to listen on that target element
+
+    // after creating the observable we can subscribe and assign it to a property/observer
+    this.createBtnObs = fromEvent(this.createbtn?.nativeElement, 'click')  // this line will return an observable
+                        .subscribe((data) => {  // our handler for the observable/incoming data
+                          console.log(data);
+                          // call the showItem method
+                          this.showItem(++count);  // pass the counter               
+                        });  
+  }
+
+  // Call the ngAfterViewInit LCH, because it will be called when the view of this component is fully initialized
+  // call it after we interact with it, don't call it before hand
+  ngAfterViewInit(){
+    this.buttonClicked();  // call our buttonClicked method
+  }
+
+  // JS code that will create an element in DOM
+  showItem(val: number) {
+    // we access the DOM and create a div, assign that to a property
+    let div = document.createElement('div');
+    div.innerText = 'Item' + val;  // we add a text inside that created element
+    div.className = 'data-list';
+    document.getElementById('container')?.appendChild(div);  // append the child element 
   }
 }
