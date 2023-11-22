@@ -11,10 +11,12 @@ export class ShowTaskComponent {
                      'Add more notes to my Django app.', 
                      'Go for a walk at some point.'];
 
+  // DP injection
   constructor(private taskService: TaskService){}
 
 
   ngOnInit(){
+    // Subscribe to our observable 
     this.taskService.CreateTask.subscribe((value: any) => {
       this.tasks.push(value);
     })

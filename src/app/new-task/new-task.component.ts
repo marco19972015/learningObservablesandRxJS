@@ -7,6 +7,8 @@ import { TaskService } from '../Services/task.service';
   styleUrls: ['./new-task.component.css']
 })
 export class NewTaskComponent {
+
+  // assigns the new task from out template. 
   newTask: string = '';
 
   // dependency injection on our property
