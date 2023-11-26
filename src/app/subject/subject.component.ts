@@ -9,6 +9,17 @@ import { Observable } from 'rxjs';
 
 export class SubjectComponent implements OnInit{
   ngOnInit(){
-    let obs = new Observable
+
+    // The example bellow shows how an Observable is unicast.
+    // It does not emit the same value for all its subscribers
+
+    // Emit a random number and from our obs observable
+    let obs = new Observable((observer) => {observer.next(Math.random())})
+
+    // Subscriber 1
+    obs.subscribe((data) => {console.log(data);})
+
+    // Subscriber 2
+    obs.subscribe((data) => {console.log(data);})
   }
 }
