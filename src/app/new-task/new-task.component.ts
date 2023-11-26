@@ -12,12 +12,13 @@ export class NewTaskComponent {
   newTask: string = '';
 
   // dependency injection on our property
-  constructor(private taskService: TaskService){}
+  taskService: TaskService = inject(TaskService)
 
 
   // click event on our button
   onCreateTask(){
     // emit the value from the newTask
+    // 1. Assign the property that becomesn an obervable
     this.taskService.onCreateTask(this.newTask)
   }
 }

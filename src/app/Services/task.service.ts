@@ -6,11 +6,11 @@ import { Subject } from "rxjs";
 })
 export class TaskService {
 
-    // Create the Observable
+    // 2. create the observable
     CreateTask = new Subject<string>();
 
     onCreateTask(value: string){
-        // emit the value from our Subject using next method
+        // 3. emit value using the next event
         this.CreateTask.next(value)
     }
 }
