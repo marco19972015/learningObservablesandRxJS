@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
+import { AsyncSubject, BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 
 @Component({
@@ -10,26 +10,28 @@ import { ajax } from 'rxjs/ajax';
 
 export class SubjectComponent implements OnInit{
   ngOnInit(){
+    // 1. AsyncSubject is going to emit the last emitted value to all its subscribers
+    // it will pass the last emitted value to all its subscribers after the COMPLETE METHOD IS CALLED on that async subject
+    // 2. We can also call the complete method after calling a subscriber
+
+    // use new keyword to call the constructor of AsyncSubject class
+    const asyncSubject = new AsyncSubject();
+
+    // we can call the next method to emit a value
+    asyncSubject.next(100);
+    asyncSubject.next(200);
+    asyncSubject.next(300);
+
+    // allows the value to reach the subscribers
+    // asyncSubject.complete();
     
-    const subject = new ReplaySubject();
+    // Create a subscriber for our asyncSubject, which gets the last emitted value
+    asyncSubject.subscribe((data) => console.log(`Subscriber 1: ${data}`))
+    asyncSubject.subscribe((data) => console.log(`Subscriber 2: ${data}`))
 
-    // The past values will be emitted in the new subscribers
-    subject.next(100);
-    subject.next(200);
-    subject.next(300);
 
-    // Subscriber 1 (at run 1 subject = 100, 200, 300) (second run subject = 2020)
-    subject.subscribe((data) => {console.log('Subscriber 1: ' + data);})
+    asyncSubject.complete();
 
-    // Subscriber 2 (at run 1 subject = 100, 200, 300) (second run subject = 2020)
-    subject.subscribe((data) => {console.log('Subscriber 2: ' + data);})
-
-    subject.next(2020);
-
-    // Subscriber 3 (at run 1 subject = 100, 200, 300) (second run subject = 2020)
-    subject.subscribe((data) => {console.log('Subscriber 3: ' + data);})
-
-    // At this line (subject = 2023, 2023, 2023)
-    subject.next(2023)
+    // AsyncSubject always emits a single value (the last emitted value before the complete method is called)
   }
 }
