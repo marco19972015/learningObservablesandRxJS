@@ -10,28 +10,40 @@ import { ajax } from 'rxjs/ajax';
 
 export class SubjectComponent implements OnInit{
   ngOnInit(){
-    // 1. AsyncSubject is going to emit the last emitted value to all its subscribers
-    // it will pass the last emitted value to all its subscribers after the COMPLETE METHOD IS CALLED on that async subject
-    // 2. We can also call the complete method after calling a subscriber
+    // Promise vs Observables
 
-    // use new keyword to call the constructor of AsyncSubject class
-    const asyncSubject = new AsyncSubject();
+    // a promise does not need to be imported 
+    const promise = new Promise((resolve, reject) => {
+      // code below gets executed immediately since a promise ALWAYS returns some data
+      console.log('Promise is called');
+      resolve(100);
 
-    // we can call the next method to emit a value
-    asyncSubject.next(100);
-    asyncSubject.next(200);
-    asyncSubject.next(300);
+      // Promise won't emit these values 
+      resolve(200);
+      resolve(300);
+    })
 
-    // allows the value to reach the subscribers
-    // asyncSubject.complete();
-    
-    // Create a subscriber for our asyncSubject, which gets the last emitted value
-    asyncSubject.subscribe((data) => console.log(`Subscriber 1: ${data}`))
-    asyncSubject.subscribe((data) => console.log(`Subscriber 2: ${data}`))
+    // recieves data from what is emitted from Promise callback function
+    promise.then((data) => {
+      console.log(data);
+    })
+
+    // Observable needs to be imported from RxJS library
+    const obs = new Observable((data) => {
+      // code below needs a subscriber to emit (lazy)
+      console.log('Observable is called');
+      
+      // We can emit all the values below 
+      data.next(200);
+      data.next(300);
+      data.next(400);
+    });
+
+    // when there is a subscriber our callback function in the observable will be executed
+    obs.subscribe((data) => {
+      console.log(data);
+    });
 
 
-    asyncSubject.complete();
-
-    // AsyncSubject always emits a single value (the last emitted value before the complete method is called)
   }
 }
